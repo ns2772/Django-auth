@@ -45,22 +45,25 @@
 
 <script>
 
-  // $(document).on("change", "#siteTitle", function() {
-  //   localStorage.setItem('siteTitle', $(this).val());
-  //   $('.navbar-brand').text($(this).val()); 
-  // });
+  $(document).on("change", "#time-zone", function() {
+    $.ajax({
+      url: '{% url "user-time-zone" %}',
+      type: 'POST',
+      data: {
+        'csrfmiddlewaretoken': '{{ csrf_token }}',
+        'time_zone': $(this).val(),
+      },
+      success: function(data) {
+        console.log(data, 'success')
+        window.location.reload()
+      },
+      error: function(data) {
+        console.log(data, 'error')
+      },
+    });
+	  return false;
+  });
 
-  // $(document).on("change", "#bodycolorPicker", function() {
-  //   $('body').css('background-color', $(this).val()); 
-  // });
-
-  // $(document).ready(function() {
-  //   var siteTitle = localStorage.getItem('siteTitle');
-  //   if(siteTitle){
-  //     $('.navbar-brand').text(siteTitle); 
-  //     $('#siteTitle').val(siteTitle);
-  //   }
-  // });
 </script>
 </body>
 </html>

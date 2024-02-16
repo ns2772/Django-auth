@@ -36,7 +36,7 @@
                         <a class="dropdown-item" href="{% url 'account_change_password' %}">Change Password</a>
                         <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
                         {% else %}
-                        <a class="dropdown-item" href="{% url 'account_login' %}">Login</a>
+                        <a class="dropdown-item" href="{% url 'custom-login' %}">Login</a>
                         <a class="dropdown-item" href="{% url 'account_signup' %}">Signup</a>
                         {% endif %}
 
@@ -48,5 +48,12 @@
             </ul>
 
         </div>
+        <li class="nav-item">
+            <select aria-label="Select A Timezone" id="time-zone">
+                {% for i in request|all_time_zone %}
+                    <option value="{{i}}" {% if request|current_time_zone == i %}selected{% endif %}>{{i}}</option>
+                {% endfor %}
+              </select>
+        </li>
     </div>
 </nav>

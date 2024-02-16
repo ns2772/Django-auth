@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+
 User = get_user_model()
 class ProfileCompleteMiddleware(MiddlewareMixin):
 
@@ -30,3 +32,21 @@ class ProfileCompleteMiddleware(MiddlewareMixin):
                 incom_profile = self.validate_user_data(request)
                 if incom_profile:
                     return redirect('/user-profile/')
+
+
+class TimezoneMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.user.is_authenticated:
+            try:
+                user_profile = User.objects.get(id=request.user.id)
+                timezone.activate(user_profile.time_zone)
+            except User.DoesNotExist:
+                timezone.deactivate()
+        else:
+            timezone.deactivate()
+
+        response = self.get_response(request)
+        return response

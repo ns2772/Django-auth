@@ -68,6 +68,7 @@ class CustomUser(
     gender = models.CharField(
 		max_length=20, choices=GENDER_CHOICES, default="m"
 	)
+    time_zone = models.CharField(max_length=100, default="EST")
     
     is_active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)  # a admin user; non super-user
@@ -99,3 +100,10 @@ class SiteSetting(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class EmailVerificationToken(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100)
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
